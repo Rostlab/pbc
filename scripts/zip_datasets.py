@@ -41,7 +41,7 @@ def main() -> None:
     with zipfile.ZipFile(archive_path, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
         for rel_path in include_paths:
             abs_path = repo_root / rel_path
-            save_path = "PBC" / rel_path
+            save_path = rel_path
             # arcname ensures paths inside zip are relative to project root
             zf.write(abs_path, arcname=str(save_path))
 
