@@ -9,6 +9,7 @@ All included datasets are listed below. Details and files can be found in the re
 
 ### Supervised
 
+* [conservation](supervised/conservation)
 * [subcellular location](supervised/scl)
 * [secondary structure](supervised/secondary_structure)
 
