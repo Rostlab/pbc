@@ -86,7 +86,7 @@ eprint = {https://academic.oup.com/bioinformatics/article-pdf/33/21/3387/2516606
 
 ## Data licensing
 
-The RAW data downloaded from both aforementioned publications is subject
+The RAW data downloaded from the aforementioned publications is subject
 to [Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 Modified data available in this repository falls under [AFL-3](https://opensource.org/licenses/AFL-3.0).
 
