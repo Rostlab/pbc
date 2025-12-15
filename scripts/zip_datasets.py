@@ -20,6 +20,8 @@ def main() -> None:
         Path("README.md"),
         Path("supervised/conservation/conservation.fasta"),
         Path("supervised/conservation/README.md"),
+        Path("supervised/disorder/disorder.fasta"),
+        Path("supervised/disorder/README.md"),
         Path("supervised/scl/scl.fasta"),
         Path("supervised/scl/README.md"),
         Path("supervised/secondary_structure/secondary_structure.fasta"),
