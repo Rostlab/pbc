@@ -11,6 +11,7 @@ All included datasets are listed below. Details and files can be found in the re
 
 * [conservation](supervised/conservation)
 * [disorder](supervised/disorder)
+* [membrane](supervised/membrane)
 * [subcellular location](supervised/scl)
 * [secondary structure](supervised/secondary_structure)
 
