@@ -45,6 +45,7 @@ def read_cv_fasta(path: Path) -> List[Tuple[str, str, str]]:
     Returns list of tuples: (id, seq, target)
     """
     records: List[Tuple[str, str, str]] = []
+    seq_ids = []
     with path.open("r") as f:
         lines = [line.rstrip("\n") for line in f]
 
@@ -66,10 +67,11 @@ def read_cv_fasta(path: Path) -> List[Tuple[str, str, str]]:
         # then, if '|' present, keep the first token before whitespace as the ID
         id_token = header.split()[0]
         seq_id = id_token  # keep full token (often Accession|...|...|fold)
-
+        seq_ids.append(seq_id)
         # sanity: lengths can differ in some sources, but we don't enforce here strictly
         records.append((seq_id, seq, target))
         i += 3
+    assert len(seq_ids) == len(set(seq_ids))
     return records
 
 

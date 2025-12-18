@@ -44,12 +44,15 @@ def read_fasta(file_path: str):
     with open(file_path, "r") as f:
         lines = f.readlines()
         seqs = {}
+        seq_ids = []
         for line in lines:
             if line.startswith(">"):
                 seq_id = line.replace(">", "").strip()
+                seq_ids.append(seq_id)
                 seqs[seq_id] = ""
             else:
                 seqs[seq_id] += line.strip()
+    assert len(seqs) == len(seq_ids)
     return seqs
 
 
