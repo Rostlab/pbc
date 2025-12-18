@@ -7,6 +7,8 @@ import sys
 import zipfile
 from pathlib import Path
 
+from sanity_check_datasets import sanity_check
+
 
 def main() -> None:
     # Resolve repository root as the parent of this script's directory
@@ -29,6 +31,8 @@ def main() -> None:
         Path("supervised/secondary_structure/secondary_structure.fasta"),
         Path("supervised/secondary_structure/README.md"),
     ]
+    fasta_file_paths = [Path("..") / file for file in include_paths if file.name.endswith(".fasta")]
+    sanity_check(fasta_file_paths)
 
     # Archive output path (in repo root)
     archive_path = repo_root / zip_file_name
