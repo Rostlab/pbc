@@ -9,6 +9,7 @@ All included datasets are listed below. Details and files can be found in the re
 
 ### Supervised
 
+* [binding](supervised/binding)
 * [conservation](supervised/conservation)
 * [disorder](supervised/disorder)
 * [membrane](supervised/membrane)
