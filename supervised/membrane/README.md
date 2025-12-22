@@ -2,14 +2,12 @@
 
 ## Description
 
-The dataset provided here aims at predicting protein membrane state (9-state).
+The dataset provided here aims at predicting protein membrane state (4-state).
 The possible membrane states for each residue (assigned to `TARGET`) are the following:
-- `B`/`b`: Transmembrane beta strand
-- `H`/`h`: Transmembrane alpha helix
+- `B`: Transmembrane beta strand
+- `H`: Transmembrane alpha helix
 - `S`: Signal peptide
-- `1`: Non-Transmembrane, inside
-- `2`: Non-Transmembrane, outside
-- `U`: Unknown/Unresolved in PDB
+- `N`: Non-Transmembrane
 
 ## Dataset Compilation
 
@@ -18,15 +16,26 @@ The provided dataset was compiled from the
 splits there were used to create hold-out splits for training, validation and testing. Additionally, all sequences from
 the `predictions/blacklist.txt` were removed.
 
-* Training: CV splits 1-4 (4520 sequences)
-* Validation: Random 10% split of training (497 sequences)
+* Training: CV splits 1-4 (4515 sequences)
+* Validation: Random 10% split of training (502 sequences)
 * Test: CV split 0 (1265 sequences)
+
+<details><summary>Dataset Target Mapping</summary>
+To get more robust classes for per-residue evaluation, the following mapping was applied to the TMbed labels:
+
+<li><i>B/b</i>: Transmembrane beta strand -> <i>B</i></li>
+<li><i>H/h</i>: Transmembrane alpha helix -> <i>H</i></li>
+<li><i>S</i>: Signal peptide -> <i>S</i></li>
+<li><i>1</i>: Non-Transmembrane, inside -> <i>N</i></li>
+<li><i>2</i>: Non-Transmembrane, outside -> <i>N</i></li>
+<li><i>U</i>: Unknown/Unresolved in PDB -> <i>N</i></li>
+</details>
 
 ## Dataset Format
 
 The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biotrainer) fasta format.
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test), the target label
-and a mask (0 if U(nknown) else 1).
+and a mask (0 if U(nknown) in TMbed dataset, else 1).
 
 ## Dataset Benchmarks
 
