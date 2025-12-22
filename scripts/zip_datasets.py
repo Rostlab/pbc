@@ -20,6 +20,11 @@ def main() -> None:
     include_paths = [
         Path("LICENSE"),
         Path("README.md"),
+        Path("supervised/binding/binding_combined.fasta"),
+        Path("supervised/binding/binding_metal.fasta"),
+        Path("supervised/binding/binding_nuclear.fasta"),
+        Path("supervised/binding/binding_small.fasta"),
+        Path("supervised/binding/README.md"),
         Path("supervised/conservation/conservation.fasta"),
         Path("supervised/conservation/README.md"),
         Path("supervised/disorder/disorder.fasta"),
