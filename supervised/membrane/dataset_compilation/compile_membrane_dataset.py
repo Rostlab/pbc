@@ -32,19 +32,33 @@ Usage examples:
 """
 from __future__ import annotations
 
-import argparse
-import random
+import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
+from collections import namedtuple
 from sklearn.model_selection import train_test_split
 
+_Record = namedtuple("_Record", ["seq_id", "seq", "target", "mask", "set"])
 
-def read_cv_fasta(path: Path) -> List[Tuple[str, str, str]]:
+
+def _map_target(target: str):
+    target_map = {"B": "B",
+                  "b": "B",
+                  "H": "H",
+                  "h": "H",
+                  "S": "S",
+                  "U": "N",
+                  "1": "N",
+                  "2": "N"}
+    return "".join([target_map[t] for t in target])
+
+
+def read_cv_fasta(path: Path) -> List[_Record]:
     """Read a 3-line-per-record FASTA with sequence and annotation.
 
     Returns list of tuples: (id, seq, target)
     """
-    records: List[Tuple[str, str, str]] = []
+    records: List[_Record] = []
     seq_ids = []
     with path.open("r") as f:
         lines = [line.rstrip("\n") for line in f]
@@ -57,19 +71,20 @@ def read_cv_fasta(path: Path) -> List[Tuple[str, str, str]]:
             i += 1
             continue
         if not lines[i].startswith(">"):
-            raise ValueError(f"Expected header starting with '>' in {path} at line {i+1}")
+            raise ValueError(f"Expected header starting with '>' in {path} at line {i + 1}")
         header = lines[i][1:].strip()
         if i + 2 >= n:
-            raise ValueError(f"Incomplete record at end of file {path}, starting at line {i+1}")
+            raise ValueError(f"Incomplete record at end of file {path}, starting at line {i + 1}")
         seq = lines[i + 1].strip()
         target = lines[i + 2].strip()
+        mask = "".join(["0" if res == "U" else "1" for res in target])
+        mapped_target = _map_target(target)
         # derive a compact ID: take up to first whitespace in header
         # then, if '|' present, keep the first token before whitespace as the ID
         id_token = header.split()[0]
         seq_id = id_token  # keep full token (often Accession|...|...|fold)
         seq_ids.append(seq_id)
-        # sanity: lengths can differ in some sources, but we don't enforce here strictly
-        records.append((seq_id, seq, target))
+        records.append(_Record(seq_id, seq, mapped_target, mask, "train"))
         i += 3
     assert len(seq_ids) == len(set(seq_ids))
     return records
@@ -84,17 +99,52 @@ def read_blacklist():
     assert len(ids) == 235
     return ids
 
-def write_biotrainer_fasta(out_path: Path, entries: List[Tuple[str, str, str, str]]) -> None:
+
+def split_membrane_train_val_stratified(dedup_train_pool: list[_Record], seed: int, train_ids, val_fraction: float):
+    # Stratified Split train/validation based on membrane residue ratio per sequence
+    # Define helper to compute membrane ratio (B/H/S counted) among unmasked positions
+    def membrane_ratio(record: _Record) -> float:
+        mem = 0
+        total = 0
+        for t, m in zip(record.target, record.mask):
+            if m == "1":
+                total += 1
+                if t != "N":
+                    mem += 1
+        # avoid div by zero (shouldn't happen, but be safe)
+        return (mem / total) if total > 0 else 0.0
+
+    # Prepare ids and ratios aligned
+    seq_ids: List[str] = [r.seq_id for r in dedup_train_pool]
+    ratios: List[float] = [membrane_ratio(r) for r in dedup_train_pool]
+
+    # Determine number of bins based on dataset size
+    n_bins = min(10, max(2, len(seq_ids) // 20))
+    percentiles = np.linspace(0, 100, n_bins + 1)[1:-1]  # exclude 0 and 100
+    bin_edges = np.percentile(ratios, percentiles) if len(percentiles) > 0 else []
+    stratify_labels = np.digitize(ratios, bins=bin_edges)
+    train_ids, val_ids = train_test_split(
+        seq_ids, test_size=val_fraction, random_state=seed, stratify=stratify_labels
+    )
+
+    # Report ratios after splitting
+    train_ratios = [ratios[i] for i, id_ in enumerate(seq_ids) if id_ in train_ids]
+    val_ratios = [ratios[i] for i, id_ in enumerate(seq_ids) if id_ in val_ids]
+    print(f"Average membrane ratio - train: {np.mean(train_ratios):.4f}, val: {np.mean(val_ratios):.4f}")
+
+    return train_ids, val_ids
+
+
+def write_biotrainer_fasta(out_path: Path, entries: List[_Record]) -> None:
     """Write entries to FASTA with conservation-like header.
 
     entries: list of (seq_id, seq, target, split)
     """
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("w") as out:
-        for seq_id, seq, target, split in entries:
-            mask = "".join(["0" if res == "U" else "1" for res in target])
-            out.write(f">{seq_id} SET={split} TARGET={target} MASK={mask}\n")
-            out.write(f"{seq}\n")
+        for record in entries:
+            out.write(f">{record.seq_id} SET={record.set} TARGET={record.target} MASK={record.mask}\n")
+            out.write(f"{record.seq}\n")
 
 
 def main():
@@ -103,7 +153,7 @@ def main():
     val_fraction = 0.1
 
     # Gather records per fold
-    fold_records: Dict[int, List[Tuple[str, str, str]]] = {}
+    fold_records: Dict[int, List[_Record]] = {}
     for fold in range(5):
         path = cv_dir / f"cv_0{fold}_a.fasta"
         if not path.exists():
@@ -111,20 +161,20 @@ def main():
         fold_records[fold] = read_cv_fasta(path)
 
     # Assign splits
-    test_entries: List[Tuple[str, str, str, str]] = []
-    train_pool: List[Tuple[str, str, str]] = []
+    test_entries: List[_Record] = []
+    train_pool: List[_Record] = []
 
     # CV0 → test
-    for seq_id, seq, target in fold_records[0]:
-        test_entries.append((seq_id, seq, target, "test"))
-    test_ids = {seq_id for seq_id, _, _, _ in test_entries}
+    for record in fold_records[0]:
+        test_entries.append(record._replace(set="test"))
+    test_ids = {r.seq_id for r in test_entries}
     assert len(test_ids) == len(test_entries)
     print(f"Number of test sequences extracted: {len(test_ids)}")
 
     # CV1–4 → train pool
     for fold in (1, 2, 3, 4):
         train_pool.extend(fold_records[fold])
-    train_ids = {seq_id for seq_id, _, _ in train_pool}
+    train_ids = {r.seq_id for r in train_pool}
     print("Number of training sequences extracted:", len(train_ids))
 
     for train_id in train_ids:
@@ -134,56 +184,78 @@ def main():
 
     # Deduplicate by seq_id keeping first occurrence
     seen: set[str] = set()
-    dedup_train_pool: List[Tuple[str, str, str]] = []
-    for seq_id, seq, target in train_pool:
-        if seq_id in seen:
+    dedup_train_pool: List[_Record] = []
+    for record in train_pool:
+        if record.seq_id in seen:
             continue
-        seen.add(seq_id)
-        dedup_train_pool.append((seq_id, seq, target))
-    dedup_ids = {seq_id for seq_id, _, _ in dedup_train_pool}
+        seen.add(record.seq_id)
+        dedup_train_pool.append(record)
+    dedup_ids = {r.seq_id for r in dedup_train_pool}
     assert len(dedup_ids) == len(dedup_train_pool)
 
     # Apply blacklist
     blacklist_ids = read_blacklist()
-    test_entries = [entry for entry in test_entries if entry[0] not in blacklist_ids]
-    dedup_train_pool = [entry for entry in dedup_train_pool if entry[0] not in blacklist_ids]
+    test_entries = [r for r in test_entries if r.seq_id not in blacklist_ids]
+    dedup_train_pool = [r for r in dedup_train_pool if r.seq_id not in blacklist_ids]
 
     print(f"Number of blacklist sequences: {len(blacklist_ids)}")
     print(f"Number of train sequences after blacklist removal: {len(dedup_train_pool)}")
     print(f"Number of test sequences after blacklist removal: {len(test_entries)}")
 
     # Check for unique sequences
-    train_seqs = {seq for _, seq, _ in dedup_train_pool}
-    test_seqs = {seq for _, seq, _, _ in test_entries}
+    train_seqs = [r.seq for r in dedup_train_pool]
+    test_seqs = [r.seq for r in test_entries]
 
     assert len(train_seqs) == len(set(train_seqs))
     assert len(test_seqs) == len(set(test_seqs))
 
-    # Split train/validation
-    train_ids, val_ids = train_test_split(list(dedup_ids), test_size=val_fraction, random_state=seed)
+    train_ids, val_ids = split_membrane_train_val_stratified(dedup_train_pool, seed, train_ids, val_fraction)
 
-    train_entries: List[Tuple[str, str, str, str]] = []
-    val_entries: List[Tuple[str, str, str, str]] = []
-    for i, (seq_id, seq, target) in enumerate(dedup_train_pool):
-        split = "val" if seq_id in val_ids else "train"
-        (val_entries if split == "val" else train_entries).append((seq_id, seq, target, split))
+    train_id_set = set(train_ids)
+    val_id_set = set(val_ids)
+    assert len(train_id_set) + len(val_id_set) == len(dedup_train_pool)
+
+    train_entries: List[_Record] = []
+    val_entries: List[_Record] = []
+    for record in dedup_train_pool:
+        if record.seq_id in val_id_set:
+            val_entries.append(record._replace(set="val"))
+        else:
+            train_entries.append(record._replace(set="train"))
 
     # Combine and write
     all_entries = train_entries + val_entries + test_entries
 
     # Sort entries for reproducible file order (by split, then id)
     split_order = {"train": 0, "val": 1, "test": 2}
-    all_entries.sort(key=lambda x: (split_order[x[3]], x[0]))
+    all_entries.sort(key=lambda x: (split_order[x.set], x.seq_id))
 
     out = Path("membrane.fasta")
     write_biotrainer_fasta(Path("membrane.fasta"), all_entries)
 
     # Print a short summary
     print(f"Wrote: {out}")
-    print(f"  train: {len(train_entries)}")
-    print(f"  val:   {len(val_entries)} (val_fraction={val_fraction})")
-    print(f"  test:  {len(test_entries)} (from CV0)")
-    
+
+    # Compute and print membrane ratios for train/val for verification
+    def agg_membrane_ratio(entries: List[_Record]) -> float:
+        pos = 0
+        tot = 0
+        for r in entries:
+            for t, m in zip(r.target, r.mask):
+                if m == "1":
+                    tot += 1
+                    if t != "N":
+                        pos += 1
+        return (pos / tot) if tot > 0 else 0.0
+
+    train_ratio = agg_membrane_ratio(train_entries)
+    val_ratio = agg_membrane_ratio(val_entries)
+    test_ratio = agg_membrane_ratio(test_entries)
+
+    print(f"  train: {len(train_entries)} (membrane ratio: {train_ratio:.4f})")
+    print(f"  val:   {len(val_entries)} (val_fraction={val_fraction}, membrane ratio: {val_ratio:.4f})")
+    print(f"  test:  {len(test_entries)} (from CV0), membrane ratio: {test_ratio:.4f}")
+
 
 if __name__ == "__main__":
     main()
