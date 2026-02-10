@@ -10,7 +10,8 @@ The possible subcellular localizations (assigned to `TARGET`) are `Cytoplasm`, `
 ## Dataset Compilation
 
 The provided dataset is the `mixed_hard` split from the
-[FLIP scl split repository](https://github.com/J-SNACKKB/FLIP/tree/4363d5e07f096e4e4a3d0bfd7e6a5a21b2b79dad/splits/scl).
+[FLIP scl split repository](https://github.com/J-SNACKKB/FLIP/tree/4363d5e07f096e4e4a3d0bfd7e6a5a21b2b79dad/splits/scl)
+with remapped UniProt ids.
 It contains [LightAttention dataset](https://academic.oup.com/bioinformaticsadvances/article/1/1/vbab035/6432029),
 namely
 the [LightAttention train split](https://github.com/HannesStark/protein-localization/blob/7b0be1e64a91db8ad1a8feae994a4d09aa9d7b1b/data_files/deeploc_our_train_set.fasta),
