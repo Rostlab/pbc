@@ -28,6 +28,8 @@ def main() -> None:
         Path("supervised/disorder_trizod/README.md"),
         Path("supervised/phages/phages.fasta"),
         Path("supervised/phages/README.md"),
+        Path("supervised/membrane/membrane.fasta"),
+        Path("supervised/membrane/README.md"),
         Path("supervised/frustration/frustration_classification.fasta"),
         Path("supervised/frustration/frustration_regression.fasta"),
         Path("supervised/frustration/README.md"),
