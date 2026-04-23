@@ -10,7 +10,8 @@ All included datasets are listed below. Details and files can be found in the re
 ### Supervised
 
 * [conservation](supervised/conservation)
-* [disorder](supervised/disorder)
+* [disorder_chezod](supervised/disorder_chezod)
+* [disorder_trizod](supervised/disorder_trizod)
 * [subcellular location](supervised/scl)
 * [secondary structure](supervised/secondary_structure)
 
