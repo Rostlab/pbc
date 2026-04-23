@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-disorder_output = "disorder.fasta"
+disorder_output = "disorder_chezod.fasta"
 
 
 def read_test_set_scores():
