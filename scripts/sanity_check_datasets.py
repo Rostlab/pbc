@@ -42,7 +42,8 @@ def _check(seq_records: dict[str, dict[str, str]]):
         if ";" in target:
             target = target.split(";")
         assert len(target) > 0
-        assert len(record["seq"]) == len(target) if len(record["target"]) > 25 else True
+
+        assert len(record["seq"]) == len(target) if (len(target) > 50 or ';' in record["target"]) else True
 
 
 def sanity_check(dataset_paths: list[Path]):
