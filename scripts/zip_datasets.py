@@ -26,6 +26,8 @@ def main() -> None:
         Path("supervised/disorder_chezod/README.md"),
         Path("supervised/disorder_trizod/disorder_trizod.fasta"),
         Path("supervised/disorder_trizod/README.md"),
+        Path("supervised/phages/phages.fasta"),
+        Path("supervised/phages/README.md"),
         Path("supervised/scl/scl.fasta"),
         Path("supervised/scl/README.md"),
         Path("supervised/secondary_structure/secondary_structure.fasta"),
