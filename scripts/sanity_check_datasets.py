@@ -24,6 +24,10 @@ def _check(seq_records: dict[str, dict[str, str]]):
     assert len(seq_records) > 0
     assert len(seq_records) == len(set(seq_records.keys()))  # No duplicate ids
     seqs = [record["seq"] for record in seq_records.values()]
+    counts = {seq: seqs.count(seq) for seq in set(seqs)}
+    duplicates = {s: c for s, c in counts.items() if c > 1}
+    if len(duplicates) > 0:
+        print(f"Found {len(duplicates)} duplicate sequences: {duplicates}")
     assert len(seq_records) == len(set(seqs))  # No duplicate sequences
 
     train_seqs = set([record["seq"] for record in seq_records.values() if record["set"] == "train"])
