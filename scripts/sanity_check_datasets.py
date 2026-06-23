@@ -1,58 +1,57 @@
 from pathlib import Path
+from typing import List
+
+from biotrainer_core.input_files import read_FASTA
+from biotrainer_core.data_classes import SequenceData
 
 _test_sets = ["test", "newPISCES364", "casp12", "casp13", "casp14"]
 
-def read_fasta(file_path: Path):
-    seq_records = {}
-    seq_ids = []
-    with open(file_path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            if line.startswith(">"):
-                seq_id = line.split(">")[1].split(" ")[0].strip()
-                seq_ids.append(seq_id)
-                target = line.split("TARGET=")[1].split(" ")[0].strip()
-                split = line.split("SET=")[1].split(" ")[0].strip()
-                seq_records[seq_id] = {"target": target, "set": split}
-            else:
-                seq_records[seq_id]["seq"] = line.strip()
-    assert len(seq_records) == len(seq_ids)
-    return seq_records
 
-
-def _check(seq_records: dict[str, dict[str, str]]):
+def _check_supervised(seq_records: List[SequenceData]):
     assert len(seq_records) > 0
-    assert len(seq_records) == len(set(seq_records.keys()))  # No duplicate ids
-    seqs = [record["seq"] for record in seq_records.values()]
+    assert len(seq_records) == len(set([sr.seq_id for sr in seq_records]))  # No duplicate ids
+    seqs = [sr.seq for sr in seq_records]
     counts = {seq: seqs.count(seq) for seq in set(seqs)}
     duplicates = {s: c for s, c in counts.items() if c > 1}
     if len(duplicates) > 0:
         print(f"Found {len(duplicates)} duplicate sequences: {duplicates}")
     assert len(seq_records) == len(set(seqs))  # No duplicate sequences
 
-    train_seqs = set([record["seq"] for record in seq_records.values() if record["set"] == "train"])
-    val_seqs = set([record["seq"] for record in seq_records.values() if record["set"] == "val"])
-    test_seqs = set([record["seq"] for record in seq_records.values() if
-                     record["set"] in _test_sets])
+    train_seqs = set([sr.seq for sr in seq_records if sr.set == "train"])
+    val_seqs = set([sr.seq for sr in seq_records if sr.set == "val"])
+    test_seqs = set([sr.seq for sr in seq_records if sr.set in _test_sets])
 
     for seq in test_seqs:
         assert seq not in train_seqs
         assert seq not in val_seqs
 
-    for seq_id, record in seq_records.items():
-        assert record["set"] in ["train", "val", "test", *_test_sets]
-        assert len(record["seq"]) > 0
-        target = record["target"]
+    for record in seq_records:
+        assert record.set in ["train", "val", "test", *_test_sets]
+        assert len(record.seq) > 0
+        target = record.label
+        assert target is not None
         if ";" in target:
             target = target.split(";")
         assert len(target) > 0
 
-        assert len(record["seq"]) == len(target) if (len(target) > 50 or ';' in record["target"]) else True
+        assert len(record.seq) == len(target) if (len(target) > 50 or ';' in (record.label or "")) else True
 
 
-def sanity_check(dataset_paths: list[Path]):
+def sanity_check_supervised(dataset_paths: list[Path]):
     for dataset_path in dataset_paths:
         print(f"Checking {dataset_path}...")
-        seq_records = read_fasta(dataset_path)
-        _check(seq_records)
+        seq_records = read_FASTA(dataset_path)
+        _check_supervised(seq_records)
+        print(f"Checked {dataset_path}!")
+
+
+def sanity_check_contacts(dataset_paths: list[Path]):
+    for dataset_path in dataset_paths:
+        print(f"Checking {dataset_path}...")
+        seq_records = read_FASTA(dataset_path)
+        assert len(seq_records) > 0
+        seqs = [sr.seq for sr in seq_records]
+        assert len(set(seqs)) == len(seqs)
+        seq_ids = [sr.seq_id for sr in seq_records]
+        assert len(set(seq_ids)) == len(seq_ids)
         print(f"Checked {dataset_path}!")
