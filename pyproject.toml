@@ -1,0 +1,11 @@
+[project]
+name = "pbc"
+version = "3.0.0"
+description = "Protein (language model) Benchmarking Collection - PBC"
+readme = "README.md"
+requires-python = "==3.12"
+dependencies = [
+    "biotite>=1.7.1",
+    "biotrainer-core @ git+https://github.com/biocentral/biotrainer.git@e1d70b6f7f66868cba2e5e3b346e8b71f18dd6c6#subdirectory=biotrainer-core",
+    "scikit-learn>=1.9.0",
+]
