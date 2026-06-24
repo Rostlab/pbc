@@ -9,7 +9,11 @@ The disorder values used here are TriZOD scores.
 
 The provided dataset is compiled as follows:
 
+** OLD VERSION **:
 * Training, Validation, Test: The [UdonPred dataset](https://figshare.com/articles/dataset/UdonPred/31444642) was used.
+
+** CURRENT VERSION**:
+Internal dataset, details will be published on Zenodo.
 
 ## Dataset Format
 
