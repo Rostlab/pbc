@@ -141,7 +141,7 @@ def main() -> None:
     script_path = Path(__file__).resolve()
     repo_root = script_path.parent.parent  # scripts/ -> project root
 
-    #zip_supervised(repo_root)
+    zip_supervised(repo_root)
     zip_contacts(repo_root)
 
 
