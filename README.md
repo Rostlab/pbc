@@ -15,10 +15,18 @@ All included datasets are listed below. Details and files can be found in the re
 * [subcellular location](supervised/scl)
 * [secondary structure](supervised/secondary_structure)
 
+### Contact
+
+* [supervised](contacts/supervised)
+* [zeroshot](contacts/zeroshot)
+    * [casp14](contacts/zeroshot/casp14)
+    * [casp15](contacts/zeroshot/casp15)
+    * [selected_protein](contacts/zeroshot/selected_protein)
+
 ### Experimental
 
 The following experimental datasets can be found on a
-separate [branch](https://github.com/Rostlab/pbc/tree/experimental-datasets).
+separate [directory](supervised/_experimental).
 They are not part of the official release.
 
 * (*Supervised*) [binding](supervised/binding)
