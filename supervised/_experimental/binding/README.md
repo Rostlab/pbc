@@ -50,4 +50,4 @@ is the independent set used for these datasets.
 
 The RAW data downloaded from the aforementioned publication is subject
 to the [MIT license](https://opensource.org/license/MIT).
-Modified data available in this repository falls under [AFL-3](https://opensource.org/licenses/AFL-3.0).
+Modified data available in this repository falls under [MIT](https://opensource.org/licenses/MIT).

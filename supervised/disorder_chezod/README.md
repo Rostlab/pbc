@@ -98,4 +98,4 @@ on an almost identical dataset (training set - 3 duplicates, identical test set)
 
 The RAW data downloaded from the aforementioned publications is subject
 to [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
-Modified data available in this repository falls under [AFL-3](https://opensource.org/licenses/AFL-3.0).
+Modified data available in this repository falls under [MIT](https://opensource.org/licenses/MIT).
