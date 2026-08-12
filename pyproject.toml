@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "biotite>=1.7.1",
-    "biotrainer-core @ git+https://github.com/biocentral/biotrainer.git@e1d70b6f7f66868cba2e5e3b346e8b71f18dd6c6#subdirectory=biotrainer-core",
+    "biocentral>=2.0.0", # @ git+https://github.com/biocentral/biocentral.git@refactor/monorepo#subdirectory=biocentral_python",
     "scikit-learn>=1.9.0",
 ]
+
+[tool.uv.sources]
+biocentral = { path = "../../IdeaProjects/biocentral/biocentral_python", editable = true}

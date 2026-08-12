@@ -68,7 +68,7 @@ wheels = [
 [[package]]
 name = "biocentral"
 version = "2.0.0"
-source = { git = "https://github.com/biocentral/biocentral.git?subdirectory=biocentral_python&rev=refactor%2Fmonorepo#9a0c20da7f260cab7f60a1944b7ec8da28f6130c" }
+source = { editable = "../../IdeaProjects/biocentral/biocentral_python" }
 dependencies = [
     { name = "biocentral-api" },
     { name = "biocentral-vis" },
@@ -78,10 +78,25 @@ dependencies = [
     { name = "platformdirs" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "biocentral-api", editable = "../../IdeaProjects/biocentral/biocentral_api/python" },
+    { name = "biocentral-server", marker = "extra == 'all'", editable = "../../IdeaProjects/biocentral/biocentral_server" },
+    { name = "biocentral-server", marker = "extra == 'server'", editable = "../../IdeaProjects/biocentral/biocentral_server" },
+    { name = "biocentral-vis", editable = "../../IdeaProjects/biocentral/biocentral_vis/python" },
+    { name = "biotrainer", marker = "extra == 'all'", editable = "../../IdeaProjects/biocentral/biotrainer" },
+    { name = "biotrainer", marker = "extra == 'local'", editable = "../../IdeaProjects/biocentral/biotrainer" },
+    { name = "biotrainer-core", editable = "../../IdeaProjects/biocentral/biotrainer/biotrainer-core" },
+    { name = "click", specifier = ">=8.0.0,<9.0.0" },
+    { name = "ipykernel", specifier = ">=7.3.0" },
+    { name = "platformdirs", specifier = ">=4.0.0,<5.0.0" },
+]
+provides-extras = ["server", "local", "all"]
+
 [[package]]
 name = "biocentral-api"
 version = "2.0.0"
-source = { git = "https://github.com/biocentral/biocentral.git?subdirectory=biocentral_api%2Fpython&rev=refactor%2Fmonorepo#9a0c20da7f260cab7f60a1944b7ec8da28f6130c" }
+source = { editable = "../../IdeaProjects/biocentral/biocentral_api/python" }
 dependencies = [
     { name = "biotrainer-core" },
     { name = "pydantic" },
@@ -91,14 +106,43 @@ dependencies = [
     { name = "urllib3" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "biotrainer-core", specifier = ">=2.0.0,<3.0.0" },
+    { name = "pydantic", specifier = ">=2.0.0,<3.0.0" },
+    { name = "python-dateutil", specifier = ">=2.8.2,<3.0.0" },
+    { name = "tqdm", specifier = ">=4.68.0,<5.0.0" },
+    { name = "typing-extensions", specifier = ">=4.7.1,<5.0.0" },
+    { name = "urllib3", specifier = ">=2.1.0,<3.0.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "build", specifier = ">=1.3.0" },
+    { name = "flake8", specifier = ">=4.0.0" },
+    { name = "mypy", specifier = ">=1.5" },
+    { name = "pytest", specifier = ">=7.2.1" },
+    { name = "pytest-cov", specifier = ">=2.8.1" },
+    { name = "tox", specifier = ">=3.9.0" },
+    { name = "twine", specifier = ">=6.2.0" },
+    { name = "types-python-dateutil", specifier = ">=2.8.19.14" },
+]
+
 [[package]]
 name = "biocentral-vis"
 version = "2.0.0"
-source = { git = "https://github.com/biocentral/biocentral.git?subdirectory=biocentral_vis%2Fpython&rev=refactor%2Fmonorepo#9a0c20da7f260cab7f60a1944b7ec8da28f6130c" }
+source = { editable = "../../IdeaProjects/biocentral/biocentral_vis/python" }
 dependencies = [
     { name = "altair" },
     { name = "biocentral-api" },
     { name = "vl-convert-python" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "altair", specifier = ">=6.0.0" },
+    { name = "biocentral-api", editable = "../../IdeaProjects/biocentral/biocentral_api/python" },
+    { name = "vl-convert-python", specifier = ">=1.9.0.post1" },
 ]
 
 [[package]]
@@ -132,13 +176,22 @@ wheels = [
 [[package]]
 name = "biotrainer-core"
 version = "2.0.0"
-source = { git = "https://github.com/biocentral/biocentral.git?subdirectory=biotrainer%2Fbiotrainer-core&rev=refactor%2Fmonorepo#9a0c20da7f260cab7f60a1944b7ec8da28f6130c" }
+source = { editable = "../../IdeaProjects/biocentral/biotrainer/biotrainer-core" }
 dependencies = [
     { name = "h5py" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pydantic" },
     { name = "ruamel-yaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "h5py", specifier = ">=3.15.0,<4.0.0" },
+    { name = "numpy", specifier = ">=2.4.1,<2.5.0" },
+    { name = "pandas", specifier = ">=2.3.3" },
+    { name = "pydantic", specifier = ">=2.12.3" },
+    { name = "ruamel-yaml", specifier = ">=0.17.40,<0.18.0" },
 ]
 
 [[package]]
@@ -878,7 +931,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "biocentral", git = "https://github.com/biocentral/biocentral.git?subdirectory=biocentral_python&rev=refactor%2Fmonorepo" },
+    { name = "biocentral", editable = "../../IdeaProjects/biocentral/biocentral_python" },
     { name = "biotite", specifier = ">=1.7.1" },
     { name = "scikit-learn", specifier = ">=1.9.0" },
 ]
