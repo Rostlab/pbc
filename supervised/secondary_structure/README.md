@@ -30,6 +30,16 @@ The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biot
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test), the target label,
 and a mask indicating if the target label should be used for calculating the loss.
 
+## Dataset Analysis
+
+![Split Distribution](_dataset_analysis/secondary_structure_split_distribution.svg)
+
+![Label Distribution](_dataset_analysis/secondary_structure_label_distribution.svg)
+
+![Labels By Split Distribution](_dataset_analysis/secondary_structure_labels_by_split_distribution.svg)
+
+![Sequence Length Distribution](_dataset_analysis/secondary_structure_sequence_length_distribution.svg)
+
 ## Dataset Benchmarks
 
 The [ProtT5 paper](https://doi.org/10.1109/tpami.2021.3095381) provides a number of benchmarks for the dataset.

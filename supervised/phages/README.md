@@ -38,6 +38,16 @@ The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biot
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test),
 and the target class.
 
+## Dataset Analysis
+
+![Split Distribution](_dataset_analysis/phages_split_distribution.svg)
+
+![Label Distribution](_dataset_analysis/phages_label_distribution.svg)
+
+![Labels By Split Distribution](_dataset_analysis/phages_labels_by_split_distribution.svg)
+
+![Sequence Length Distribution](_dataset_analysis/phages_sequence_length_distribution.svg)
+
 ## Citations
 
 ```bibtex
