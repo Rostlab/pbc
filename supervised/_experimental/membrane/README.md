@@ -62,4 +62,4 @@ for the membrane prediction task.
 
 The RAW data downloaded from the aforementioned publication is subject
 to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
-Modified data available in this repository falls under [AFL-3](https://opensource.org/licenses/AFL-3.0).
+Modified data available in this repository falls under [MIT](https://opensource.org/licenses/MIT).

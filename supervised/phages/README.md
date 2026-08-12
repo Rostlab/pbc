@@ -77,4 +77,4 @@ and the target class.
 
 The RAW data downloaded from the aforementioned publications is subject
 to [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode).
-Modified data available in this repository falls under [AFL-3](https://opensource.org/licenses/AFL-3.0).
+Modified data available in this repository falls under [MIT](https://opensource.org/licenses/MIT).
