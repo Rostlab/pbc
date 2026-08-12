@@ -11,7 +11,8 @@ All included datasets are listed below. Details and files can be found in the re
 
 * [conservation](supervised/conservation)
 * [disorder_chezod](supervised/disorder_chezod)
-* [disorder_trizod](supervised/disorder_trizod)
+* [frustration](supervised/frustration)
+* [phages](supervised/phages)
 * [subcellular location](supervised/scl)
 * [secondary structure](supervised/secondary_structure)
 
@@ -29,10 +30,13 @@ The following experimental datasets can be found on a
 separate [directory](supervised/_experimental).
 They are not part of the official release.
 
-* (*Supervised*) [binding](supervised/binding)
+* (*Supervised*) [binding](supervised/_experimental/binding)
     * Known limitation: Dataset size
-* (*Supervised*) [membrane](supervised/membrane)
+* (*Supervised*) [disorder_trizod](supervised/_experimental/disorder_trizod)
+    * Known limitation: Work in Progress   
+* (*Supervised*) [membrane](supervised/_experimental/membrane)
     * Known limitation: Data imbalance
+
 
 ## Benchmarking
 
