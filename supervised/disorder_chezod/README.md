@@ -27,6 +27,16 @@ The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biot
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test), 
 the target scores (separated by ';') and masks (unresolved (0): disorder value == 999, otherwise resolved (1)).
 
+## Dataset Analysis
+
+![Split Distribution](_dataset_analysis/disorder_chezod_split_distribution.svg)
+
+![Label Distribution](_dataset_analysis/disorder_chezod_label_distribution.svg)
+
+![Labels By Split Distribution](_dataset_analysis/disorder_chezod_labels_by_split_distribution.svg)
+
+![Sequence Length Distribution](_dataset_analysis/disorder_chezod_sequence_length_distribution.svg)
+
 ## Dataset Benchmarks
 
 ![SETH-Benchmarks](https://www.frontiersin.org/files/Articles/1019597/fbinf-02-1019597-HTML/image_m/fbinf-02-1019597-g003.jpg "Disorder-SETH Benchmarks")

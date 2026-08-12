@@ -26,6 +26,16 @@ the [LightAttention setHard test set](https://github.com/HannesStark/protein-loc
 The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biotrainer) fasta format.
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test) and the target label.
 
+## Dataset Analysis
+
+![Split Distribution](_dataset_analysis/scl_split_distribution.svg)
+
+![Label Distribution](_dataset_analysis/scl_label_distribution.svg)
+
+![Labels By Split Distribution](_dataset_analysis/scl_labels_by_split_distribution.svg)
+
+![Sequence Length Distribution](_dataset_analysis/scl_sequence_length_distribution.svg)
+
 ## Dataset Benchmarks
 
 ![LightAttention-Benchmarks](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/bioinformaticsadvances/1/1/10.1093_bioadv_vbab035/2/m_vbab035f2.jpeg?Expires=1763717766&Signature=IPN~pjw1qn2o8c7dr9zLYzETVYpXPkZVHZxb34XqwCeb7eA2lSF-zc7dc7nzunDB9kKdBCD2qsNdW-LsrBTMlekUF-BGELohKay0mjrN3Y7X1WNms1AhfMtriGTDDrk5OuO1q7sD71-snT-JIkJpcxWv4AR2QCvwFc7No4VarEcjL30nAJYI6LPZbKuFxIHqT1-8KZ~9XS1NxvXGJiL6jH5TJFlTSlDVkN66Cur8B3SfYySTyd6-xB2zpYoz59sUhxMIfJ7ruWg-CnySfIeBi~oxQNka3IJ-sDg7l~bmexCk3tS08J-4IRdrPwaQ-ldIzXfBld3gzzPu0D5BFVgSwA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA "SCL-LightAttention Benchmarks")

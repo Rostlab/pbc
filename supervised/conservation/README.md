@@ -26,6 +26,16 @@ A link to the original dataset can be found <a href="https://zenodo.org/records/
 The dataset is provided in [biotrainer-ready](https://github.com/sacdallago/biotrainer) fasta format.
 Each entry contains a sequence and a header, providing the sequence id, the set (train/val/test) and the target label.
 
+## Dataset Analysis
+
+![Split Distribution](_dataset_analysis/conservation_split_distribution.svg)
+
+![Label Distribution](_dataset_analysis/conservation_label_distribution.svg)
+
+![Labels By Split Distribution](_dataset_analysis/conservation_labels_by_split_distribution.svg)
+
+![Sequence Length Distribution](_dataset_analysis/conservation_sequence_length_distribution.svg)
+
 ## Dataset Benchmarks
 
 Marquet et al. (2021) provide the following benchmarks for this dataset:
