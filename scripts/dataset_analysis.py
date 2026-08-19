@@ -38,8 +38,26 @@ def analyze_supervised(dataset_paths: list[Path]):
         _analyze_supervised(dataset_path)
 
 
+def analyze_contacts(dataset_paths: list[Path]):
+    sequence_data = []
+    for path in dataset_paths:
+        sequences = read_FASTA(path)
+        set_annotation = str(path).split("extracted_sequences.fasta")[0].split("/")[-2]
+        sequences = [seq.set_attribute("set", set_annotation) for seq in sequences]
+        sequence_data.extend(sequences)
+
+    analysis_directory = Path("../contacts/_dataset_analysis")
+    analysis_directory.mkdir(exist_ok=True)
+
+    sequence_length_distribution = BiocentralChart.sequence_length_distribution(sequence_data)
+    sequence_length_distribution.save(analysis_directory / f"contacts_sequence_length_distribution.svg")
+
+    split_distribution = BiocentralChart.split_distribution(sequence_data)
+    split_distribution.save(analysis_directory / f"contacts_split_distribution.svg")
+
+
 def main():
-    paths = [
+    paths_supervised = [
         Path("../supervised/conservation/conservation.fasta"),
         Path("../supervised/phages/phages.fasta"),
         Path("../supervised/disorder_chezod/disorder_chezod.fasta"),
@@ -48,7 +66,17 @@ def main():
         Path("../supervised/scl/scl.fasta"),
         Path("../supervised/secondary_structure/secondary_structure.fasta"),
     ]
-    analyze_supervised(paths)
+    analyze_supervised(paths_supervised)
+
+    paths_contact = [
+        Path("../contacts/supervised/train/extracted_sequences.fasta"),
+        Path("../contacts/supervised/val/extracted_sequences.fasta"),
+        Path("../contacts/zeroshot/casp14/extracted_sequences.fasta"),
+        Path("../contacts/zeroshot/casp15/extracted_sequences.fasta"),
+        Path("../contacts/zeroshot/selected_protein/extracted_sequences.fasta"),
+    ]
+
+    analyze_contacts(paths_contact)
 
 
 if __name__ == "__main__":
