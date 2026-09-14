@@ -16,21 +16,21 @@ def zip_supervised(repo_root: Path):
     include_paths = [
         Path("LICENSE"),
         Path("README.md"),
-        Path("supervised/binding/binding_combined.fasta"),
-        Path("supervised/binding/binding_metal.fasta"),
-        Path("supervised/binding/binding_nuclear.fasta"),
-        Path("supervised/binding/binding_small.fasta"),
-        Path("supervised/binding/README.md"),
+        Path("supervised/_experimental/binding/binding_combined.fasta"),
+        Path("supervised/_experimental/binding/binding_metal.fasta"),
+        Path("supervised/_experimental/binding/binding_nuclear.fasta"),
+        Path("supervised/_experimental/binding/binding_small.fasta"),
+        Path("supervised/_experimental/binding/README.md"),
         Path("supervised/conservation/conservation.fasta"),
         Path("supervised/conservation/README.md"),
         Path("supervised/disorder_chezod/disorder_chezod.fasta"),
         Path("supervised/disorder_chezod/README.md"),
-        Path("supervised/disorder_trizod/disorder_trizod.fasta"),
-        Path("supervised/disorder_trizod/README.md"),
+        Path("supervised/_experimental/disorder_trizod/disorder_trizod.fasta"),
+        Path("supervised/_experimental/disorder_trizod/README.md"),
         Path("supervised/phages/phages.fasta"),
         Path("supervised/phages/README.md"),
-        Path("supervised/membrane/membrane.fasta"),
-        Path("supervised/membrane/README.md"),
+        Path("supervised/_experimental/membrane/membrane.fasta"),
+        Path("supervised/_experimental/membrane/README.md"),
         Path("supervised/frustration/frustration_classification.fasta"),
         Path("supervised/frustration/frustration_regression.fasta"),
         Path("supervised/frustration/README.md"),
@@ -58,8 +58,11 @@ def zip_supervised(repo_root: Path):
     # Create zip archive and add files preserving relative paths
     with zipfile.ZipFile(archive_path, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
         for rel_path in include_paths:
-            abs_path = repo_root / rel_path
             save_path = rel_path
+            if "/_experimental" in str(rel_path):
+                # Move experimental files to other datasets for compatibility with autoeval
+                save_path = Path(str(rel_path).replace("/_experimental", ""))
+            abs_path = repo_root / rel_path
             # arcname ensures paths inside zip are relative to project root
             zf.write(abs_path, arcname=str(save_path))
 
