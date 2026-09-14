@@ -46,3 +46,10 @@ If you want to benchmark a new or existing pLM on these datasets, please check o
   benchmark datasets. You can find an example notebook
   [here](https://github.com/sacdallago/biotrainer/tree/main/examples/autoeval) and compare your results on our
   [visual dashboard](https://autoeval.biocentral.cloud). 
+
+
+## Licensing
+
+This repository is licensed under the [MIT](https://opensource.org/licenses/MIT) license. This affects all provided
+code, dataset analysis, READMEs and steps to change, refine or improve datasets. Please review the *README* of each
+dataset for the original license(s) and terms of use.
