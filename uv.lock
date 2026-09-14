@@ -135,6 +135,7 @@ source = { editable = "../../IdeaProjects/biocentral/biocentral_vis/python" }
 dependencies = [
     { name = "altair" },
     { name = "biocentral-api" },
+    { name = "biotrainer-core" },
     { name = "vl-convert-python" },
 ]
 
@@ -142,6 +143,7 @@ dependencies = [
 requires-dist = [
     { name = "altair", specifier = ">=6.0.0" },
     { name = "biocentral-api", editable = "../../IdeaProjects/biocentral/biocentral_api/python" },
+    { name = "biotrainer-core", editable = "../../IdeaProjects/biocentral/biotrainer/biotrainer-core" },
     { name = "vl-convert-python", specifier = ">=1.9.0.post1" },
 ]
 

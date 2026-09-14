@@ -12,6 +12,21 @@ def _get_and_make_analysis_directory(dataset_path: Path):
     analysis_directory.mkdir(exist_ok=True)
     return analysis_directory
 
+def _postprocess_chart(chart: BiocentralChart):
+    chart.chart = chart.chart.properties(
+        width=600,
+        height=400,
+    ).configure_axis(
+        labelFontSize=18,
+        titleFontSize=22
+    ).configure_title(
+        fontSize=24,
+        font='Liberation Sans'
+    ).configure_legend(
+        labelFontSize=18,
+        titleFontSize=22
+    )
+    return chart
 
 def _analyze_supervised(dataset_path: Path):
     analysis_directory = _get_and_make_analysis_directory(dataset_path)
@@ -19,17 +34,21 @@ def _analyze_supervised(dataset_path: Path):
     sequence_data = read_FASTA(dataset_path)
 
     sequence_length_distribution = BiocentralChart.sequence_length_distribution(sequence_data)
+    sequence_length_distribution = _postprocess_chart(sequence_length_distribution)
     sequence_length_distribution.save(analysis_directory / f"{stem}_sequence_length_distribution.svg")
 
     labels_filter = lambda label: label != "999.0"
 
     label_distribution = BiocentralChart.label_distribution(sequence_data, labels_filter=labels_filter)
+    label_distribution = _postprocess_chart(label_distribution)
     label_distribution.save(analysis_directory / f"{stem}_label_distribution.svg")
 
     split_distribution = BiocentralChart.split_distribution(sequence_data)
+    split_distribution = _postprocess_chart(split_distribution)
     split_distribution.save(analysis_directory / f"{stem}_split_distribution.svg")
 
     labels_by_split_distribution = BiocentralChart.labels_by_split_distribution(sequence_data, labels_filter=labels_filter)
+    labels_by_split_distribution = _postprocess_chart(labels_by_split_distribution)
     labels_by_split_distribution.save(analysis_directory / f"{stem}_labels_by_split_distribution.svg")
 
 
@@ -50,9 +69,11 @@ def analyze_contacts(dataset_paths: list[Path]):
     analysis_directory.mkdir(exist_ok=True)
 
     sequence_length_distribution = BiocentralChart.sequence_length_distribution(sequence_data)
+    sequence_length_distribution = _postprocess_chart(sequence_length_distribution)
     sequence_length_distribution.save(analysis_directory / f"contacts_sequence_length_distribution.svg")
 
     split_distribution = BiocentralChart.split_distribution(sequence_data)
+    split_distribution = _postprocess_chart(split_distribution)
     split_distribution.save(analysis_directory / f"contacts_split_distribution.svg")
 
 
