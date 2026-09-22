@@ -16,6 +16,7 @@ def zip_supervised(repo_root: Path):
     include_paths = [
         Path("LICENSE"),
         Path("README.md"),
+        # Supervised
         Path("supervised/_experimental/binding/binding_combined.fasta"),
         Path("supervised/_experimental/binding/binding_metal.fasta"),
         Path("supervised/_experimental/binding/binding_nuclear.fasta"),
@@ -38,6 +39,9 @@ def zip_supervised(repo_root: Path):
         Path("supervised/scl/README.md"),
         Path("supervised/secondary_structure/secondary_structure.fasta"),
         Path("supervised/secondary_structure/README.md"),
+        # Unsupervised
+        Path("unsupervised/cath/cath.fasta"),
+        Path("unsupervised/cath/README.md"),
     ]
     fasta_file_paths = [Path("..") / file for file in include_paths if file.name.endswith(".fasta")]
     sanity_check_supervised(fasta_file_paths)
@@ -56,6 +60,7 @@ def zip_supervised(repo_root: Path):
         sys.exit(1)
 
     # Create zip archive and add files preserving relative paths
+    print("Creating archive..")
     with zipfile.ZipFile(archive_path, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
         for rel_path in include_paths:
             save_path = rel_path
@@ -113,6 +118,7 @@ def zip_contacts(repo_root: Path):
         sys.exit(1)
 
     # Create zip archive and add files preserving relative paths
+    print("Creating archive..")
     with zipfile.ZipFile(archive_path, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
         for rel_path in include_paths:
             abs_path = repo_root / rel_path

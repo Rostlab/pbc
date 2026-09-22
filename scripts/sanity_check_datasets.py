@@ -7,7 +7,7 @@ from biotrainer_core.data_classes import SequenceData
 _test_sets = ["test", "newPISCES364", "casp12", "casp13", "casp14"]
 
 
-def _check_supervised(seq_records: List[SequenceData]):
+def _check_supervised_unsupervised(seq_records: List[SequenceData]):
     assert len(seq_records) > 0
     assert len(seq_records) == len(set([sr.seq_id for sr in seq_records]))  # No duplicate ids
     seqs = [sr.seq for sr in seq_records]
@@ -26,7 +26,9 @@ def _check_supervised(seq_records: List[SequenceData]):
         assert seq not in val_seqs
 
     for record in seq_records:
-        assert record.set in ["train", "val", "test", *_test_sets]
+        assert record.set in ["train", "val", "test",
+                              "lookup", # Unsupervised
+                              *_test_sets]
         assert len(record.seq) > 0
         target = record.label
         assert target is not None
@@ -41,7 +43,7 @@ def sanity_check_supervised(dataset_paths: list[Path]):
     for dataset_path in dataset_paths:
         print(f"Checking {dataset_path}...")
         seq_records = read_FASTA(dataset_path)
-        _check_supervised(seq_records)
+        _check_supervised_unsupervised(seq_records)
         print(f"Checked {dataset_path}!")
 
 
