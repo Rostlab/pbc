@@ -52,7 +52,7 @@ def _analyze_supervised(dataset_path: Path):
     labels_by_split_distribution.save(analysis_directory / f"{stem}_labels_by_split_distribution.svg")
 
 
-def analyze_supervised(dataset_paths: list[Path]):
+def analyze_supervised_and_unsupervised(dataset_paths: list[Path]):
     for dataset_path in tqdm(dataset_paths, unit="dataset"):
         _analyze_supervised(dataset_path)
 
@@ -87,7 +87,12 @@ def main():
         Path("../supervised/scl/scl.fasta"),
         Path("../supervised/secondary_structure/secondary_structure.fasta"),
     ]
-    analyze_supervised(paths_supervised)
+    analyze_supervised_and_unsupervised(paths_supervised)
+
+    paths_unsupervised = [
+        Path("../unsupervised/cath/cath.fasta")
+    ]
+    analyze_supervised_and_unsupervised(paths_unsupervised)
 
     paths_contact = [
         Path("../contacts/supervised/train/extracted_sequences.fasta"),
