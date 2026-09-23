@@ -1,6 +1,8 @@
 from pathlib import Path
 from collections import Counter
+from typing import List
 
+from biotrainer_core.data_classes import SequenceData
 from biotrainer_core.input_files import read_FASTA, write_FASTA
 
 
@@ -64,6 +66,19 @@ def remove_duplicates(all_seqs, lookup_fasta_enhanced, val_fasta_enhanced, test_
     return all_seqs
 
 
+def remove_missing_labels_of_test_in_lookup(lookup_seqs: List[SequenceData], test_seqs: List[SequenceData]):
+    lookup_labels = {seq_record.label for seq_record in lookup_seqs}
+    test_labels = {seq_record.label for seq_record in test_seqs}
+
+    missing_labels = set()
+    for test_label in test_labels:
+        if test_label not in lookup_labels:
+            print(f"Missing label {test_label} in lookup.")
+            missing_labels.add(test_label)
+
+    print(f"Total missing labels for lookup: {len(missing_labels)}")
+    return [seq_record for seq_record in test_seqs if seq_record.label not in missing_labels]
+
 def main():
     result_file = Path("../cath.fasta")
 
@@ -75,17 +90,22 @@ def main():
     labels = read_labels(Path("cath_v430_dom_seqs_S100_161121_labels.txt"))
     assert len(labels) >= len(lookup_fasta) + len(val_fasta) + len(test_fasta)
 
-    lookup_fasta_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="lookup") for
+    lookup_seqs_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="lookup") for
                              seq_record in lookup_fasta]
-    val_fasta_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="val") for
+    val_seqs_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="val") for
                           seq_record in val_fasta]
-    test_fasta_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="test") for
+    test_seqs_enhanced = [seq_record.copy_with_label(label=labels[seq_record.seq_id], set_name="test") for
                            seq_record in test_fasta]
 
-    all_seqs = lookup_fasta_enhanced + val_fasta_enhanced + test_fasta_enhanced
+    # Remove missing lookup data (cannot be transferred)
+    test_seqs_enhanced = remove_missing_labels_of_test_in_lookup(lookup_seqs_enhanced, test_seqs_enhanced)
+
+    assert len(test_seqs_enhanced) < len(test_fasta)
+
+    all_seqs = lookup_seqs_enhanced + val_seqs_enhanced + test_seqs_enhanced
 
     # Find and remove duplicates
-    all_seqs = remove_duplicates(all_seqs, lookup_fasta_enhanced, val_fasta_enhanced, test_fasta_enhanced)
+    all_seqs = remove_duplicates(all_seqs, lookup_seqs_enhanced, val_seqs_enhanced, test_seqs_enhanced)
 
     # Write sequences
     write_FASTA(result_file, all_seqs)
