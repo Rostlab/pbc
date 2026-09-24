@@ -94,7 +94,7 @@ def create_dev_subset(lookup_seqs: List[SequenceData]):
 
     lookup_dev_subset = []
     random.seed(43)
-    sample_maximum = 10  # Sample at most 10 sequences with the same H-level
+    sample_maximum = 26  # Sample at most N sequences with the same H-level, 26 is chosen because it equals roughly 10% of the dataset as a result
     for h_level, seqs in h_level_labels_to_lookup_seqs.items():
         random_sample = random.sample(seqs, min(sample_maximum, len(seqs)))
         lookup_dev_subset.extend(random_sample)
