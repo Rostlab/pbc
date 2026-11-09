@@ -19,6 +19,7 @@ two flavors, sharing identical sequences, identifiers, splits and masks:
   frustration states, following [Ferreiro et al. 2007](https://doi.org/10.1073/pnas.0709915104) and
   [Freiberger et al. 2023](https://doi.org/10.1038/s41467-023-43801-2):
 
+  The three states are: **H**ighly, **N**eutrally, and **M**inimally frustrated. 
   The classes are strongly imbalanced, and the functionally most interesting class (`H`) is the
   minority class.
 
