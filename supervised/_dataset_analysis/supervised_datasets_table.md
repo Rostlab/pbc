@@ -1,0 +1,9 @@
+| Dataset | Level | Task Type | Task Type Short | Total Seqs | Train Seqs | Val Seqs | Test Seqs | Test Split Details | Total Residues | Annotated Residues | Len Min | Len Median | Len Mean | Len Max | Source / Reference |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Conservation | Residue | Classification (9-state) | Classification | 10466 | 9392 | 555 | 519 | test: 519 | 2715814 | 2715814 | 40 | 223 | 259.5 | 2191 | Marquet et al. (2021) / FLIP |
+| Disorder (CheZOD) | Residue | Regression (CheZOD score) | Regression | 1285 | 1050 | 118 | 117 | test: 117 | 151644 | 144782 | 39 | 112 | 118.0 | 615 | Nielsen & Mulder (2020) / SETH |
+| Frustration (Class.) | Residue | Classification (3-class: H/N/M) | Classification | 9995 | 7997 | 998 | 1000 | test: 1000 | 4369685 | 1768265 | 61 | 390 | 437.2 | 1674 | Leusch et al. (2026) |
+| Frustration (Regr.) | Residue | Regression (Frustration Index) | Regression | 9995 | 7997 | 998 | 1000 | test: 1000 | 4369685 | 1768265 | 61 | 390 | 437.2 | 1674 | Leusch et al. (2026) |
+| Secondary Structure | Residue | Classification (3-state: C/H/E) | Classification | 11205 | 9712 | 1080 | 413 | newPISCES364: 364, casp12: 20, casp13: 12, casp14: 17 | 2857830 | 2669148 | 20 | 217 | 255.0 | 1632 | Elnaggar et al. (2021) / CASP 12-14 |
+| Phages | Sequence | Classification (9-class) | Classification | 5131 | 3847 | 770 | 514 | test: 514 | 1128582 | 1128582 | 20 | 143 | 220.0 | 2765 | Bouras et al. (2026) / PHROG v4 |
+| Subcellular Loc. (SCL) | Sequence | Classification (10-class) | Classification | 11671 | 9503 | 1678 | 490 | test: 490 | 6068066 | 6068066 | 40 | 419 | 519.9 | 13100 | Stärk et al. (2021) / DeepLoc |
